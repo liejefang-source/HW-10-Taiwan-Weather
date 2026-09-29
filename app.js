@@ -84,7 +84,9 @@ function renderCombinedTable(results, aqiResults) {
 }
 
 function renderForecast(cityIndex) {
-    const content = document.getElementById('forecast-content');
+    const datesTr = document.getElementById('forecast-dates');
+    const tbody = document.getElementById('forecast-tbody');
+    
     if (!globalWeatherData) return;
     
     const hourly = globalWeatherData[cityIndex].hourly;
@@ -101,59 +103,59 @@ function renderForecast(cityIndex) {
         
         if (!daysMap[date]) daysMap[date] = {};
         
-        // Pick 08:00 (Morning), 14:00 (Noon), 20:00 (Night)
         if (hour === '08') daysMap[date].morning = { temp: temps[i], code: codes[i], pop: pops[i], isDay: true };
         if (hour === '14') daysMap[date].noon = { temp: temps[i], code: codes[i], pop: pops[i], isDay: true };
         if (hour === '20') daysMap[date].night = { temp: temps[i], code: codes[i], pop: pops[i], isDay: false };
     });
     
-    let html = '';
-    Object.keys(daysMap).slice(0, 7).forEach(date => {
-        const day = daysMap[date];
+    const next7Days = Object.keys(daysMap).slice(0, 7);
+    
+    // Render Dates (X-Axis)
+    let datesHtml = '<th></th>'; // Empty top-left cell
+    next7Days.forEach(date => {
         const dateObj = new Date(date);
         const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
-        const displayDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()} (${dayOfWeek})`;
-        
-        const renderPeriod = (data) => {
-            if (!data) return '<div class="forecast-period">-</div>';
-            const { icon, desc } = getWeatherIconAndDesc(data.code, data.isDay);
-            return `
-                <div class="forecast-period">
+        datesHtml += `<th>${dateObj.getMonth() + 1}/${dateObj.getDate()} (${dayOfWeek})</th>`;
+    });
+    datesTr.innerHTML = datesHtml;
+    
+    // Helper to render cell
+    const renderCell = (data) => {
+        if (!data) return '<td>-</td>';
+        const { icon, desc } = getWeatherIconAndDesc(data.code, data.isDay);
+        return `
+            <td>
+                <div class="matrix-cell">
                     <i class="ph ${icon}"></i>
-                    <div class="period-temp">${Math.round(data.temp)}°C</div>
-                    <div class="period-pop"><i class="ph ph-drop"></i> ${data.pop}%</div>
+                    <div class="matrix-temp">${Math.round(data.temp)}°C</div>
+                    <div class="matrix-pop"><i class="ph ph-drop"></i> ${data.pop}%</div>
                 </div>
-            `;
-        };
-        
-        html += `
-            <div class="forecast-day-row">
-                <div class="forecast-date">${displayDate}</div>
-                <div class="forecast-periods">
-                    <div class="period-col">
-                        <div class="period-label">早</div>
-                        ${renderPeriod(day.morning)}
-                    </div>
-                    <div class="period-col">
-                        <div class="period-label">中</div>
-                        ${renderPeriod(day.noon)}
-                    </div>
-                    <div class="period-col">
-                        <div class="period-label">晚</div>
-                        ${renderPeriod(day.night)}
-                    </div>
-                </div>
-            </div>
+            </td>
         `;
+    };
+    
+    // Render Y-Axis rows
+    let morningHtml = `<td class="row-label">早上</td>`;
+    let noonHtml = `<td class="row-label">中午</td>`;
+    let nightHtml = `<td class="row-label">晚上</td>`;
+    
+    next7Days.forEach(date => {
+        const day = daysMap[date];
+        morningHtml += renderCell(day.morning);
+        noonHtml += renderCell(day.noon);
+        nightHtml += renderCell(day.night);
     });
     
-    content.innerHTML = html;
+    tbody.innerHTML = `
+        <tr>${morningHtml}</tr>
+        <tr>${noonHtml}</tr>
+        <tr>${nightHtml}</tr>
+    `;
 }
 
 async function fetchWeather() {
     const timeEl = document.getElementById('last-updated');
     
-    // Format coordinates for batch request
     const lats = cities.map(c => c.lat).join(',');
     const lons = cities.map(c => c.lon).join(',');
     
@@ -185,7 +187,7 @@ async function fetchWeather() {
     } catch (error) {
         console.error('Error fetching weather:', error);
         document.getElementById('weather-tbody').innerHTML = '<tr><td colspan="9" class="loading">無法載入資訊，請稍後再試。</td></tr>';
-        document.getElementById('forecast-content').innerHTML = '<div class="loading">無法載入預報，請稍後再試。</div>';
+        document.getElementById('forecast-tbody').innerHTML = '<tr><td colspan="8" class="loading">無法載入預報，請稍後再試。</td></tr>';
     }
 }
 
@@ -193,7 +195,6 @@ async function fetchWeather() {
 document.addEventListener('DOMContentLoaded', () => {
     fetchWeather();
     
-    // Listen for city changes
     document.getElementById('city-selector').addEventListener('change', (e) => {
         renderForecast(e.target.value);
     });
