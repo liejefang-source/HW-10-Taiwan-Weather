@@ -10,7 +10,6 @@ const cities = [
 function getWeatherIconAndDesc(code, isDay) {
     let icon = '';
     let desc = '';
-    const dayNight = isDay ? '' : '-night';
 
     if (code === 0) {
         icon = isDay ? 'ph-sun' : 'ph-moon';
@@ -45,7 +44,7 @@ function getWeatherIconAndDesc(code, isDay) {
 }
 
 async function fetchWeather() {
-    const grid = document.getElementById('weather-grid');
+    const tbody = document.getElementById('weather-tbody');
     const timeEl = document.getElementById('last-updated');
     
     // Format coordinates for batch request
@@ -59,9 +58,9 @@ async function fetchWeather() {
         const data = await response.json();
         
         // Clear loading text
-        grid.innerHTML = '';
+        tbody.innerHTML = '';
         
-        // Determine if it's a batch response (array) or single (which shouldn't happen here but just in case)
+        // Determine if it's a batch response (array) or single
         const isArray = Array.isArray(data);
         const results = isArray ? data : [data];
 
@@ -69,39 +68,21 @@ async function fetchWeather() {
             const cityData = results[index].current;
             const { icon, desc } = getWeatherIconAndDesc(cityData.weather_code, cityData.is_day);
             
-            const card = document.createElement('div');
-            card.className = 'weather-card';
+            const tr = document.createElement('tr');
             
-            card.innerHTML = `
-                <div class="card-header">
-                    <h2 class="city-name">${city.name}</h2>
-                    <i class="ph ${icon} weather-icon"></i>
-                </div>
-                <div class="temperature">
-                    ${Math.round(cityData.temperature_2m)}<span>°C</span>
-                </div>
-                <div class="weather-desc">${desc}</div>
-                <div class="details">
-                    <div class="detail-item">
-                        <i class="ph ph-drop"></i>
-                        <span>濕度: ${cityData.relative_humidity_2m}%</span>
+            tr.innerHTML = `
+                <td class="table-city">${city.name}</td>
+                <td>
+                    <div class="table-weather">
+                        <i class="ph ${icon}"></i>
+                        <span>${desc}</span>
                     </div>
-                    <div class="detail-item">
-                        <i class="ph ph-wind"></i>
-                        <span>風速: ${cityData.wind_speed_10m} km/h</span>
-                    </div>
-                    <div class="detail-item">
-                        <i class="ph ph-thermometer"></i>
-                        <span>體感: ${Math.round(cityData.apparent_temperature)}°C</span>
-                    </div>
-                    <div class="detail-item">
-                        <i class="ph ph-cloud-rain"></i>
-                        <span>降雨: ${cityData.precipitation} mm</span>
-                    </div>
-                </div>
+                </td>
+                <td class="table-temp">${Math.round(cityData.temperature_2m)}°C</td>
+                <td class="table-rain">${cityData.precipitation} mm</td>
             `;
             
-            grid.appendChild(card);
+            tbody.appendChild(tr);
         });
         
         const now = new Date();
@@ -109,7 +90,7 @@ async function fetchWeather() {
         
     } catch (error) {
         console.error('Error fetching weather:', error);
-        grid.innerHTML = '<div class="loading">無法載入天氣資訊，請稍後再試。</div>';
+        tbody.innerHTML = '<tr><td colspan="4" class="loading">無法載入天氣資訊，請稍後再試。</td></tr>';
     }
 }
 
