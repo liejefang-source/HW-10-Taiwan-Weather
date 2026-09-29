@@ -45,6 +45,7 @@ function getWeatherIconAndDesc(code, isDay) {
 
 async function fetchWeather() {
     const tbody = document.getElementById('weather-tbody');
+    const detailsTbody = document.getElementById('details-tbody');
     const timeEl = document.getElementById('last-updated');
     
     // Format coordinates for batch request
@@ -59,6 +60,7 @@ async function fetchWeather() {
         
         // Clear loading text
         tbody.innerHTML = '';
+        detailsTbody.innerHTML = '';
         
         // Determine if it's a batch response (array) or single
         const isArray = Array.isArray(data);
@@ -68,9 +70,9 @@ async function fetchWeather() {
             const cityData = results[index].current;
             const { icon, desc } = getWeatherIconAndDesc(cityData.weather_code, cityData.is_day);
             
-            const tr = document.createElement('tr');
-            
-            tr.innerHTML = `
+            // Build Weather Table Row
+            const tr1 = document.createElement('tr');
+            tr1.innerHTML = `
                 <td class="table-city">${city.name}</td>
                 <td>
                     <div class="table-weather">
@@ -81,8 +83,17 @@ async function fetchWeather() {
                 <td class="table-temp">${Math.round(cityData.temperature_2m)}°C</td>
                 <td class="table-rain">${cityData.precipitation} mm</td>
             `;
+            tbody.appendChild(tr1);
             
-            tbody.appendChild(tr);
+            // Build Details Table Row
+            const tr2 = document.createElement('tr');
+            tr2.innerHTML = `
+                <td class="table-city">${city.name}</td>
+                <td class="table-rain">${cityData.relative_humidity_2m}%</td>
+                <td class="table-rain">${cityData.wind_speed_10m} km/h</td>
+                <td class="table-temp" style="color: var(--accent);">${Math.round(cityData.apparent_temperature)}°C</td>
+            `;
+            detailsTbody.appendChild(tr2);
         });
         
         const now = new Date();
@@ -91,6 +102,7 @@ async function fetchWeather() {
     } catch (error) {
         console.error('Error fetching weather:', error);
         tbody.innerHTML = '<tr><td colspan="4" class="loading">無法載入天氣資訊，請稍後再試。</td></tr>';
+        detailsTbody.innerHTML = '<tr><td colspan="4" class="loading">無法載入進階資訊，請稍後再試。</td></tr>';
     }
 }
 
