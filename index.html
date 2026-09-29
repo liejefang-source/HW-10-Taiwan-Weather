@@ -37,11 +37,13 @@
                             <th>降雨</th>
                             <th>濕度</th>
                             <th>風速</th>
+                            <th>AQI</th>
+                            <th>紫外線</th>
                         </tr>
                     </thead>
                     <tbody id="weather-tbody">
                         <tr>
-                            <td colspan="7" class="loading">載入天氣資訊中...</td>
+                            <td colspan="9" class="loading">載入天氣資訊中...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -51,7 +53,7 @@
         <!-- Bottom Dashboard Layout: Satellite Map + 7-Day Forecast -->
         <div class="dashboard-layout">
             <div class="map-container">
-                <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=6&overlay=satellite&product=satellite&level=surface&lat=23.697&lon=120.960" frameborder="0"></iframe>
+                <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=8&overlay=satellite&product=satellite&level=surface&lat=23.697&lon=120.960&detailLat=23.697&detailLon=120.960" frameborder="0"></iframe>
             </div>
 
             <div class="weather-table-container forecast-container">

@@ -45,13 +45,22 @@ function getWeatherIconAndDesc(code, isDay = true) {
     return { icon, desc };
 }
 
-function renderCombinedTable(results) {
+function renderCombinedTable(results, aqiResults) {
     const tbody = document.getElementById('weather-tbody');
     tbody.innerHTML = '';
     
     cities.forEach((city, index) => {
         const current = results[index].current;
+        const currentAqi = aqiResults[index].current;
         const { icon, desc } = getWeatherIconAndDesc(current.weather_code, current.is_day);
+        
+        let aqiColor = currentAqi.us_aqi <= 50 ? '#4ade80' : 
+                       currentAqi.us_aqi <= 100 ? '#facc15' : 
+                       currentAqi.us_aqi <= 150 ? '#fb923c' : '#f87171';
+        
+        let uvColor = current.uv_index <= 2 ? '#4ade80' : 
+                      current.uv_index <= 5 ? '#facc15' : 
+                      current.uv_index <= 7 ? '#fb923c' : '#f87171';
         
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -67,6 +76,8 @@ function renderCombinedTable(results) {
             <td class="table-rain">${current.precipitation} mm</td>
             <td>${current.relative_humidity_2m}%</td>
             <td>${current.wind_speed_10m} km/h</td>
+            <td style="color: ${aqiColor}; font-weight: 600;">${currentAqi.us_aqi}</td>
+            <td style="color: ${uvColor}; font-weight: 600;">${current.uv_index}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -146,16 +157,23 @@ async function fetchWeather() {
     const lats = cities.map(c => c.lat).join(',');
     const lons = cities.map(c => c.lon).join(',');
     
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code,precipitation_probability&timezone=Asia%2FTaipei`;
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,uv_index&hourly=temperature_2m,weather_code,precipitation_probability&timezone=Asia%2FTaipei`;
+    const aqiUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lats}&longitude=${lons}&current=us_aqi&timezone=Asia%2FTaipei`;
 
     try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const [weatherResponse, aqiResponse] = await Promise.all([
+            fetch(weatherUrl),
+            fetch(aqiUrl)
+        ]);
         
-        const isArray = Array.isArray(data);
-        globalWeatherData = isArray ? data : [data];
+        const weatherData = await weatherResponse.json();
+        const aqiData = await aqiResponse.json();
         
-        renderCombinedTable(globalWeatherData);
+        const isArray = Array.isArray(weatherData);
+        globalWeatherData = isArray ? weatherData : [weatherData];
+        const globalAqiData = Array.isArray(aqiData) ? aqiData : [aqiData];
+        
+        renderCombinedTable(globalWeatherData, globalAqiData);
         
         // Initial render for selected city
         const cityIndex = document.getElementById('city-selector').value;
@@ -166,7 +184,7 @@ async function fetchWeather() {
         
     } catch (error) {
         console.error('Error fetching weather:', error);
-        document.getElementById('weather-tbody').innerHTML = '<tr><td colspan="7" class="loading">無法載入資訊，請稍後再試。</td></tr>';
+        document.getElementById('weather-tbody').innerHTML = '<tr><td colspan="9" class="loading">無法載入資訊，請稍後再試。</td></tr>';
         document.getElementById('forecast-content').innerHTML = '<div class="loading">無法載入預報，請稍後再試。</div>';
     }
 }
