@@ -3,31 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台灣天氣 | 即時氣象儀表板</title>
+    <title>台灣天氣 | CYBER_WEATHER_SYSTEM</title>
     <meta name="description" content="台灣主要城市即時天氣與7天預報。">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <div class="background-anim"></div>
+    <div class="cyber-grid"></div>
     <main class="container">
         <header>
-            <h1>台灣天氣</h1>
-            <p id="last-updated">更新中...</p>
+            <h1 class="glitch" data-text="台灣天氣">台灣天氣</h1>
+            <p id="last-updated" class="cyber-text">SYSTEM.UPDATING...</p>
         </header>
 
         <!-- Wind Map -->
-        <div class="map-container full-width-map">
-            <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=7&overlay=wind&product=ecmwf&level=surface&lat=23.697&lon=120.960" frameborder="0"></iframe>
+        <div class="map-wrapper">
+            <div class="map-container cyber-border">
+                <div class="cyber-corner top-left"></div>
+                <div class="cyber-corner top-right"></div>
+                <div class="cyber-corner bottom-left"></div>
+                <div class="cyber-corner bottom-right"></div>
+                <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=7&overlay=wind&product=ecmwf&level=surface&lat=23.697&lon=120.960" frameborder="0"></iframe>
+            </div>
         </div>
 
         <!-- Combined Weather Table -->
-        <div class="weather-table-container full-width-table table-scroll">
-            <h3 class="table-title">各地即時觀測數據</h3>
-            <table class="weather-table">
+        <div class="weather-table-container full-width-table table-scroll cyber-border">
+            <h3 class="table-title cyber-text">> 各地即時觀測數據_</h3>
+            <table class="weather-table cyber-table">
                 <thead>
                     <tr>
                         <th>城市</th>
@@ -37,28 +44,34 @@
                         <th>降雨</th>
                         <th>濕度</th>
                         <th>風速</th>
-                        <th>AQI</th>
+                        <th>空氣品質</th>
                         <th>紫外線</th>
                     </tr>
                 </thead>
                 <tbody id="weather-tbody">
                     <tr>
-                        <td colspan="9" class="loading">載入天氣資訊中...</td>
+                        <td colspan="9" class="loading glitch-text">INITIALIZING_DATA...</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Satellite Map -->
-        <div class="map-container full-width-map">
-            <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=8&overlay=satellite&product=satellite&level=surface&lat=23.697&lon=120.960&detailLat=23.697&detailLon=120.960" frameborder="0"></iframe>
+        <div class="map-wrapper">
+            <div class="map-container cyber-border">
+                <div class="cyber-corner top-left"></div>
+                <div class="cyber-corner top-right"></div>
+                <div class="cyber-corner bottom-left"></div>
+                <div class="cyber-corner bottom-right"></div>
+                <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=7&overlay=satellite&product=satellite&level=surface&lat=23.697&lon=120.960&detailLat=23.697&detailLon=120.960" frameborder="0"></iframe>
+            </div>
         </div>
 
         <!-- 7-Day Forecast Matrix Table -->
-        <div class="weather-table-container full-width-table forecast-container">
+        <div class="weather-table-container full-width-table forecast-container cyber-border">
             <div class="forecast-header">
-                <h3 class="table-title">七天早中晚預報</h3>
-                <select id="city-selector" class="city-selector">
+                <h3 class="table-title cyber-text">> 七天早中晚預報_</h3>
+                <select id="city-selector" class="city-selector cyber-select">
                     <option value="0">台北市</option>
                     <option value="1">新北市</option>
                     <option value="2">桃園市</option>
@@ -69,7 +82,7 @@
             </div>
             
             <div class="table-scroll">
-                <table class="weather-table forecast-matrix-table">
+                <table class="weather-table forecast-matrix-table cyber-table">
                     <thead>
                         <tr id="forecast-dates">
                             <!-- X-axis injected here -->
@@ -77,7 +90,7 @@
                     </thead>
                     <tbody id="forecast-tbody">
                         <tr>
-                            <td colspan="8" class="loading">載入預報資訊中...</td>
+                            <td colspan="8" class="loading glitch-text">CALCULATING_FORECAST...</td>
                         </tr>
                     </tbody>
                 </table>
