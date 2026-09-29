@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台灣即時天氣 |即時氣象儀表板</title>
+    <meta name="description" content="台灣主要城市即時天氣資訊，包含溫度、濕度與降雨機率。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Phosphor Icons for weather icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="background-anim"></div>
+    <main class="container">
+        <header>
+            <h1>台灣即時天氣</h1>
+            <p id="last-updated">更新中...</p>
+        </header>
+
+        <div class="weather-grid" id="weather-grid">
+            <!-- Weather cards will be injected here by JS -->
+            <div class="loading">載入天氣資訊中...</div>
+        </div>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
