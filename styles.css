@@ -74,11 +74,12 @@ header {
 h1 {
     font-size: 3.5rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #fff;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+    text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent);
+    animation: neon-flicker 4s infinite alternate;
 }
 
 .cyber-text {
@@ -161,6 +162,9 @@ h1 {
     align-items: center;
     gap: 0.5rem;
     text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 8px var(--accent);
+    animation: text-flicker 6s infinite;
 }
 
 .table-title::before {
@@ -339,6 +343,33 @@ h1 {
     2%, 64% { transform: translate(2px, 0) skew(0deg); }
     4%, 60% { transform: translate(-2px, 0) skew(0deg); }
     62% { transform: translate(0, 0) skew(5deg); }
+}
+
+@keyframes neon-flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        text-shadow:
+        0 0 4px #fff,
+        0 0 10px #fff,
+        0 0 20px var(--accent),
+        0 0 40px var(--accent),
+        0 0 80px var(--accent);
+        opacity: 1;
+    }
+    20%, 24%, 55% {       
+        text-shadow: none;
+        opacity: 0.5;
+    }
+}
+
+@keyframes text-flicker {
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 8px var(--accent);
+    }
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+        opacity: 0.4;
+        text-shadow: none;
+    }
 }
 
 @media (max-width: 768px) {
