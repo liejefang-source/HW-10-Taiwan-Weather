@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台灣即時天氣 |即時氣象儀表板</title>
-    <meta name="description" content="台灣主要城市即時天氣資訊，包含溫度、濕度與降雨機率。">
+    <title>台灣即時天氣 | 即時氣象儀表板</title>
+    <meta name="description" content="台灣主要城市即時天氣與7天預報。">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <!-- Phosphor Icons for weather icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
@@ -20,59 +19,57 @@
             <p id="last-updated">更新中...</p>
         </header>
 
-        <!-- Top Dashboard Layout: Weather -->
+        <!-- Top Dashboard Layout: Wind Map + Combined Table -->
         <div class="dashboard-layout">
-            <!-- Large Windy Map (Wind) -->
             <div class="map-container">
                 <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=7&overlay=wind&product=ecmwf&level=surface&lat=23.697&lon=120.960" frameborder="0"></iframe>
             </div>
 
-            <!-- Weather Table -->
-            <div class="weather-table-container">
-                <h3 class="table-title">各地基本氣象</h3>
+            <div class="weather-table-container table-scroll">
+                <h3 class="table-title">各地即時觀測數據</h3>
                 <table class="weather-table">
                     <thead>
                         <tr>
                             <th>城市</th>
                             <th>天氣</th>
                             <th>溫度</th>
+                            <th>體感</th>
                             <th>降雨</th>
+                            <th>濕度</th>
+                            <th>風速</th>
                         </tr>
                     </thead>
                     <tbody id="weather-tbody">
                         <tr>
-                            <td colspan="4" class="loading">載入天氣資訊中...</td>
+                            <td colspan="7" class="loading">載入天氣資訊中...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Bottom Dashboard Layout: Satellite -->
+        <!-- Bottom Dashboard Layout: Satellite Map + 7-Day Forecast -->
         <div class="dashboard-layout">
-            <!-- Large Windy Map (Satellite) -->
             <div class="map-container">
                 <iframe src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=6&overlay=satellite&product=satellite&level=surface&lat=23.697&lon=120.960" frameborder="0"></iframe>
             </div>
 
-            <!-- Details Table -->
-            <div class="weather-table-container">
-                <h3 class="table-title">進階觀測數據</h3>
-                <table class="weather-table">
-                    <thead>
-                        <tr>
-                            <th>城市</th>
-                            <th>相對濕度</th>
-                            <th>風速</th>
-                            <th>體感溫度</th>
-                        </tr>
-                    </thead>
-                    <tbody id="details-tbody">
-                        <tr>
-                            <td colspan="4" class="loading">載入進階資訊中...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="weather-table-container forecast-container">
+                <div class="forecast-header">
+                    <h3 class="table-title">七天早中晚預報</h3>
+                    <select id="city-selector" class="city-selector">
+                        <option value="0">台北市</option>
+                        <option value="1">新北市</option>
+                        <option value="2">桃園市</option>
+                        <option value="3">台中市</option>
+                        <option value="4">台南市</option>
+                        <option value="5">高雄市</option>
+                    </select>
+                </div>
+                
+                <div class="forecast-content" id="forecast-content">
+                    <div class="loading">載入預報資訊中...</div>
+                </div>
             </div>
         </div>
 

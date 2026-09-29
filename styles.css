@@ -218,3 +218,115 @@ h1 {
         font-size: 2.2rem;
     }
 }
+
+/* Forecast Component Styles */
+.table-scroll {
+    overflow-x: auto;
+}
+
+.forecast-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.forecast-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 1rem;
+}
+
+.forecast-header .table-title {
+    margin-bottom: 0;
+}
+
+.city-selector {
+    background: var(--bg-color-2);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.forecast-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for forecast */
+.forecast-content::-webkit-scrollbar {
+    width: 6px;
+}
+.forecast-content::-webkit-scrollbar-thumb {
+    background-color: var(--card-border);
+    border-radius: 4px;
+}
+
+.forecast-day-row {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+.forecast-day-row:last-child {
+    border-bottom: none;
+}
+
+.forecast-date {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: var(--accent);
+}
+
+.forecast-periods {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+}
+
+.period-col {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 0.8rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.period-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.forecast-period i {
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.period-temp {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.period-pop {
+    font-size: 0.85rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.period-pop i {
+    font-size: 1rem;
+    color: var(--accent);
+}
